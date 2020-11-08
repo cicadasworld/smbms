@@ -1,0 +1,46 @@
+plugins {
+	id 'java'
+	id 'war'
+}
+
+group = 'com.jin'
+version = '0.0.1'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+dependencies {
+	compileOnly 'org.projectlombok:lombok:1.18.10'
+	annotationProcessor 'org.projectlombok:lombok:1.18.10'
+	implementation 'mysql:mysql-connector-java:8.0.18'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.3'
+	implementation 'org.slf4j:slf4j-simple:1.7.25'
+	compileOnly('javax.servlet:javax.servlet-api:4.0.0')
+	compileOnly('javax.servlet:jstl:1.2')
+	compileOnly('taglibs:standard:1.1.2')
+	testImplementation(platform('org.junit:junit-bom:5.7.0'))
+	testImplementation('org.junit.jupiter:junit-jupiter')
+}
+
+test {
+	useJUnitPlatform()
+}
+
+clean.doLast {
+	file('src/main/webapp/WEB-INF/classes').deleteDir()
+}
+
+task deploy {
+	copy {
+		from('build/classes/java/main', 'build/resources/main')
+		into('src/main/webapp/WEB-INF/classes')
+	}
+}
